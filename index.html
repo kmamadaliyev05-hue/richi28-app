@@ -3,186 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RICHI28 | Professional Betting Platform</title>
+    <title>RICHI28 | Professional Betting & Casino</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --gold: #ffb900;
-            --dark-main: #0a0e17;
-            --dark-card: #161b28;
-            --blue-accent: #007aff;
-            --text-gray: #8e94a0;
+            --accent: #ffb900;
+            --bg-main: #0a0e17;
+            --bg-card: #161b28;
+            --text-main: #ffffff;
+            --text-dim: #8e94a0;
+            --green: #00c853;
+            --blue: #007aff;
         }
 
-        body {
-            background-color: var(--dark-main);
-            color: white;
-            font-family: 'Roboto', sans-serif;
-            margin: 0; padding-bottom: 70px;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'SF Pro Display', Roboto, Arial, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); overflow-x: hidden; padding-bottom: 80px; }
 
-        /* Top Bar */
-        .top-nav {
+        /* HEADER */
+        header {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 15px; background: var(--dark-card); border-bottom: 1px solid #232a3d;
+            padding: 15px 20px; background: var(--bg-card); border-bottom: 1px solid #232a3d;
             position: sticky; top: 0; z-index: 1000;
         }
+        .logo { font-size: 22px; font-weight: 900; color: var(--accent); letter-spacing: 1px; }
+        .auth-btns .reg-btn { background: var(--blue); border: none; padding: 8px 15px; border-radius: 6px; color: white; font-weight: bold; }
 
-        .logo { font-size: 20px; font-weight: 900; color: var(--gold); letter-spacing: 1px; }
+        /* VIEWS (Sahifalar) */
+        .view { display: none; padding: 15px; animation: fadeIn 0.3s ease; }
+        .view.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .auth-buttons button {
-            padding: 8px 15px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer;
+        /* CARDS & GRIDS */
+        .balance-card {
+            background: linear-gradient(135deg, #1c2438 0%, #161b28 100%);
+            padding: 20px; border-radius: 16px; border: 1px solid rgba(255, 185, 0, 0.2);
+            margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;
         }
-        .reg-btn { background: var(--blue-accent); color: white; }
+        .balance-card h2 { font-size: 28px; margin-top: 5px; color: var(--accent); }
+        .dep-btn-main { background: var(--accent); border: none; padding: 12px 25px; border-radius: 10px; font-weight: 900; color: #000; cursor: pointer; }
 
-        /* Balance Section */
-        .user-panel {
-            background: var(--dark-card); margin: 10px; padding: 15px; border-radius: 12px;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .balance-info div { font-size: 12px; color: var(--text-gray); }
-        .balance-info h2 { font-size: 22px; color: white; }
-
-        .quick-dep {
-            background: var(--gold); color: black; padding: 10px 20px; border-radius: 8px;
-            border: none; font-weight: 900;
-        }
-
-        /* Categories */
-        .categories {
-            display: flex; gap: 10px; padding: 10px; overflow-x: auto; white-space: nowrap;
-        }
-        .cat-item {
-            background: var(--dark-card); padding: 10px 20px; border-radius: 30px;
-            font-size: 13px; border: 1px solid #232a3d;
-        }
-        .cat-item.active { border-color: var(--gold); color: var(--gold); }
-
-        /* Game Grid */
-        .game-section { padding: 10px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .card {
-            background: var(--dark-card); border-radius: 12px; position: relative;
-            aspect-ratio: 16/10; overflow: hidden; border: 1px solid #232a3d;
+        .section-title { font-size: 18px; margin: 15px 0; color: var(--text-dim); display: flex; align-items: center; gap: 8px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .game-card {
+            background: var(--bg-card); border-radius: 12px; border: 1px solid #232a3d;
+            overflow: hidden; position: relative; aspect-ratio: 16/10;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
-        .card img { width: 100%; height: 100%; object-fit: cover; position: absolute; opacity: 0.4; }
-        .card span { position: relative; z-index: 1; font-weight: bold; font-size: 14px; }
+        .game-card i { font-size: 32px; margin-bottom: 8px; color: var(--accent); }
+        .game-card span { font-weight: bold; font-size: 13px; }
+        .badge { position: absolute; top: 8px; right: 8px; background: #ff3b30; font-size: 9px; padding: 2px 6px; border-radius: 4px; }
 
-        /* Bottom Nav */
+        /* FORMS */
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 12px; color: var(--text-dim); margin-bottom: 6px; }
+        .form-group input { 
+            width: 100%; padding: 14px; background: #0d121d; border: 1px solid #232a3d; 
+            border-radius: 8px; color: white; font-size: 16px;
+        }
+        .form-group input:focus { border-color: var(--accent); outline: none; }
+
+        /* BOTTOM NAV */
         .bottom-nav {
-            position: fixed; bottom: 0; width: 100%; background: var(--dark-card);
-            display: flex; justify-content: space-around; padding: 10px 0;
+            position: fixed; bottom: 0; width: 100%; background: var(--bg-card);
+            display: flex; justify-content: space-around; padding: 12px 0;
             border-top: 1px solid #232a3d; z-index: 1000;
         }
-        .nav-link { text-align: center; color: var(--text-gray); font-size: 10px; text-decoration: none; }
-        .nav-link i { font-size: 20px; display: block; margin-bottom: 4px; }
-        .nav-link.active { color: var(--gold); }
+        .nav-link { text-align: center; color: var(--text-dim); font-size: 10px; text-decoration: none; transition: 0.2s; cursor: pointer; }
+        .nav-link i { font-size: 22px; display: block; margin-bottom: 4px; }
+        .nav-link.active { color: var(--accent); }
 
-        /* Modal Styles */
-        .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 2000; padding: 20px;
+        /* DEPOSIT METHODS */
+        .pay-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .pay-item { 
+            background: var(--bg-card); padding: 15px; border-radius: 12px; 
+            text-align: center; border: 1px solid #232a3d; font-size: 14px;
         }
-        .modal-content { background: var(--dark-card); padding: 20px; border-radius: 15px; border: 1px solid var(--gold); }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 12px; color: var(--text-gray); margin-bottom: 5px; }
-        .form-group input { width: 100%; padding: 12px; background: #0a0e17; border: 1px solid #232a3d; color: white; border-radius: 8px; }
-        
-        .pay-methods { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
-        .pay-item { background: #0a0e17; padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #232a3d; }
+        .pay-item i { display: block; font-size: 24px; margin-bottom: 10px; color: var(--blue); }
     </style>
 </head>
 <body>
 
-    <div class="top-nav">
+    <header>
         <div class="logo">RICHI28</div>
-        <div class="auth-buttons">
-            <button class="reg-btn" onclick="openModal('regModal')">REGISTRATSIYA</button>
+        <div class="auth-btns" id="header-auth">
+            <button class="reg-btn" onclick="showView('reg-view')">REGISTRATSIYA</button>
         </div>
-    </div>
+    </header>
 
-    <div class="user-panel">
-        <div class="balance-info">
-            <div>Asosiy Balans</div>
-            <h2 id="userBalance">0.00 UZS</h2>
+    <div id="home-view" class="view active">
+        <div class="balance-card">
+            <div>
+                <p style="font-size: 12px; color: var(--text-dim);">Sizning balansingiz</p>
+                <h2 id="balance-val">0.00 UZS</h2>
+            </div>
+            <button class="dep-btn-main" onclick="showView('wallet-view')">DEPOZIT</button>
         </div>
-        <button class="quick-dep" onclick="openModal('depModal')">DEPOZIT</button>
-    </div>
 
-    <div class="categories">
-        <div class="cat-item active">HAMMASI</div>
-        <div class="cat-item">SLOTLAR</div>
-        <div class="cat-item">LIVE CASINO</div>
-        <div class="cat-item">SPORT</div>
-        <div class="cat-item">VIRTUAL</div>
-    </div>
-
-    <div class="game-section">
-        <h3 style="margin-bottom:15px; font-size: 16px;">MASHHUR O'YINLAR</h3>
+        <div class="section-title"><i class="fa fa-fire"></i> MASHHUR O'YINLAR</div>
         <div class="grid">
-            <div class="card" onclick="window.location.href='https://demo.spribe.io/games/aviator'">
-                <span>🚀 AVIATOR</span>
+            <div class="game-card" onclick="location.href='https://demo.spribe.io/games/aviator'">
+                <span class="badge">TOP</span>
+                <i class="fa fa-plane-up"></i>
+                <span>AVIATOR</span>
             </div>
-            <div class="card" onclick="window.location.href='https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?gameSymbol=vs20olympgate'">
-                <span>⚡ GATES OF OLYMPUS</span>
+            <div class="game-card" onclick="location.href='https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?gameSymbol=vs20olympgate'">
+                <i class="fa fa-bolt"></i>
+                <span>GATES OF OLYMPUS</span>
             </div>
-            <div class="card" onclick="window.location.href='https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?gameSymbol=vswayshammmer'">
-                <span>🃏 LIVE CASINO</span>
+            <div class="game-card" onclick="location.href='https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?gameSymbol=vswayshammmer'">
+                <i class="fa fa-clover"></i>
+                <span>WILD WEST GOLD</span>
             </div>
-            <div class="card" onclick="alert('Tez kunda!')">
-                <span>⚽ FUTBOL LINIYASI</span>
+            <div class="game-card" onclick="showView('games-view')">
+                <i class="fa fa- dice-five"></i>
+                <span>BARCHA O'YINLAR</span>
             </div>
         </div>
     </div>
 
-    <div id="regModal" class="modal">
-        <div class="modal-content">
-            <h2 style="color:var(--gold)">REGISTRATSIYA</h2>
-            <div class="form-group">
-                <label>Email yoki Telefon</label>
-                <input type="text" placeholder="Kiriting...">
+    <div id="reg-view" class="view">
+        <h2 style="margin-bottom: 20px;">Hisob ochish</h2>
+        <div class="form-group">
+            <label>Telefon raqamingiz</label>
+            <input type="text" placeholder="+998 90 123 45 67">
+        </div>
+        <div class="form-group">
+            <label>Parol o'ylab toping</label>
+            <input type="password" placeholder="********">
+        </div>
+        <div class="form-group">
+            <label>Promokod (Bonus uchun)</label>
+            <input type="text" id="promo-input" placeholder="RICHI28" style="border-color: var(--accent);">
+        </div>
+        <button class="dep-btn-main" style="width: 100%;" onclick="completeReg()">RO'YXATDAN O'TISH</button>
+        <p onclick="showView('home-view')" style="text-align: center; margin-top: 20px; color: var(--text-dim); font-size: 14px;">Orqaga qaytish</p>
+    </div>
+
+    <div id="wallet-view" class="view">
+        <h2 style="margin-bottom: 15px;">Hisobni to'ldirish</h2>
+        <p style="color: var(--text-dim); margin-bottom: 20px; font-size: 14px;">To'lov usulini tanlang:</p>
+        <div class="pay-grid">
+            <div class="pay-item" onclick="showPayDetails('UZCARD/HUMO', '8600 1234 5678 9012')">
+                <i class="fa fa-credit-card"></i> UZCARD / HUMO
             </div>
-            <div class="form-group">
-                <label>Parol</label>
-                <input type="password" placeholder="********">
+            <div class="pay-item" onclick="showPayDetails('USDT (TRC20)', 'TX123...456abc')">
+                <i class="fa fa-brands fa-ethereum"></i> USDT (TRC20)
             </div>
-            <div class="form-group">
-                <label>Promokod (Majburiy emas)</label>
-                <input type="text" placeholder="Masalan: RICHI777" style="border-color: var(--gold)">
+            <div class="pay-item" onclick="alert('Tez kunda...')">
+                <i class="fa fa-wallet"></i> PAYME / CLICK
             </div>
-            <button class="quick-dep" style="width:100%" onclick="closeModal('regModal')">HISOB OCHISH</button>
+            <div class="pay-item" onclick="alert('Tez kunda...')">
+                <i class="fa fa-globe"></i> VISA / MASTER
+            </div>
+        </div>
+        <div id="pay-box" style="display:none; margin-top: 20px; background: var(--bg-card); padding: 20px; border-radius: 12px; border: 1px dashed var(--accent);">
+            <p id="pay-method-name" style="color: var(--accent); font-weight: bold;"></p>
+            <h3 id="pay-details" style="margin: 10px 0; word-break: break-all;"></h3>
+            <p style="font-size: 12px; color: var(--text-dim);">To'lovni amalga oshiring va chekni botga yuboring!</p>
         </div>
     </div>
 
-    <div id="depModal" class="modal">
-        <div class="modal-content">
-            <h2 style="color:var(--gold)">HISOBNI TO'LDIRISH</h2>
-            <div class="pay-methods">
-                <div class="pay-item" onclick="alert('Karta: 8600... Chekni botga yuboring!')">💳 UZCARD/HUMO</div>
-                <div class="pay-item">₿ CRYPTO (USDT)</div>
-                <div class="pay-item">🌐 VISA/MASTERCARD</div>
-                <div class="pay-item">🅿️ PAYME/CLICK</div>
-            </div>
-            <button onclick="closeModal('depModal')" style="margin-top:20px; background:none; border:none; color:white; width:100%">ORQAGA</button>
+    <div id="support-view" class="view">
+        <h2 style="margin-bottom: 20px;">Qo'llab-quvvatlash</h2>
+        <div class="pay-item" style="text-align: left; margin-bottom: 15px;" onclick="window.location.href='https://t.me/Richi28_admin'">
+            <i class="fa fa-headset" style="display:inline; margin-right: 10px;"></i>
+            <span>24/7 Onlayn operator</span>
+        </div>
+        <div class="pay-item" style="text-align: left; margin-bottom: 15px;">
+            <i class="fa fa-question-circle" style="display:inline; margin-right: 10px;"></i>
+            <span>Ko'p beriladigan savollar</span>
+        </div>
+        <div style="background: #1c2438; padding: 15px; border-radius: 12px; font-size: 13px;">
+            <p>Murojaatlar o'rtacha 5-10 daqiqa ichida ko'rib chiqiladi. Pul yechish va to'ldirish bo'yicha savollaringiz bo'lsa, chekni ilova qiling.</p>
         </div>
     </div>
 
     <nav class="bottom-nav">
-        <a href="#" class="nav-link active"><i class="fa fa-home"></i>ASOSIY</a>
-        <a href="#" class="nav-link"><i class="fa fa-trophy"></i>SPORT</a>
-        <a href="#" class="nav-link"><i class="fa fa-gamepad"></i>GAMES</a>
-        <a href="#" class="nav-link"><i class="fa fa-headset"></i>SUPPORT</a>
-        <a href="#" class="nav-link"><i class="fa fa-user"></i>PROFIL</a>
+        <div class="nav-link active" onclick="showView('home-view', this)"><i class="fa fa-home"></i>ASOSIY</div>
+        <div class="nav-link" onclick="alert('Sport liniyalari yangilanmoqda...')"><i class="fa fa-trophy"></i>SPORT</div>
+        <div class="nav-link" onclick="showView('home-view', this)"><i class="fa fa-gamepad"></i>O'YINLAR</div>
+        <div class="nav-link" onclick="showView('support-view', this)"><i class="fa fa-comments"></i>YORDAM</div>
+        <div class="nav-link" onclick="showView('wallet-view', this)"><i class="fa fa-wallet"></i>HAMYON</div>
     </nav>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        function openModal(id) { document.getElementById(id).style.display = 'block'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function showView(viewId, element) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            
+            if(element) {
+                document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+                element.classList.add('active');
+            }
+        }
+
+        function completeReg() {
+            let promo = document.getElementById('promo-input').value;
+            alert("Tabriklaymiz! Hisobingiz ochildi. Promokod: " + promo + " faollashtirildi. +500% bonus uchun hisobni to'ldiring.");
+            document.getElementById('header-auth').innerHTML = '<span style="color:var(--green); font-weight:bold;">ID: 772841</span>';
+            showView('home-view');
+        }
+
+        function showPayDetails(name, detail) {
+            document.getElementById('pay-box').style.display = 'block';
+            document.getElementById('pay-method-name').innerText = name;
+            document.getElementById('pay-details').innerText = detail;
+        }
     </script>
 </body>
 </html>

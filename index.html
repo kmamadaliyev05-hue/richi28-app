@@ -2,45 +2,252 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RICHI28 - Game Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RICHI28 | Official Mini App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { background-color: #0b0b0b; color: #d4af37; font-family: 'Arial', sans-serif; text-align: center; margin: 0; padding: 0; }
-        .header { padding: 20px; border-bottom: 2px solid #d4af37; }
-        .logo { font-size: 30px; font-weight: bold; letter-spacing: 2px; }
-        .balance-card { background: linear-gradient(145deg, #1a1a1a, #000); margin: 20px; padding: 20px; border-radius: 15px; border: 1px solid #d4af37; }
-        .game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
-        .game-item { background: #1a1a1a; padding: 20px; border-radius: 10px; border-bottom: 3px solid #d4af37; font-weight: bold; }
-        .btn-deposit { background-color: #d4af37; color: black; padding: 15px 30px; border-radius: 25px; border: none; font-weight: bold; margin-top: 20px; cursor: pointer; }
+        :root {
+            --gold: #d4af37;
+            --dark-bg: #0f0f0f;
+            --card-bg: #1a1a1a;
+            --text-white: #ffffff;
+            --gradient-gold: linear-gradient(135deg, #d4af37 0%, #f9e2af 50%, #b8860b 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-white);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.8);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1.5px;
+        }
+
+        /* Wallet Section */
+        .wallet-container {
+            padding: 20px;
+        }
+
+        .balance-card {
+            background: linear-gradient(145deg, #1e1e1e, #121212);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .balance-label {
+            color: #888;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .balance-amount {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        .deposit-btn {
+            background: var(--gradient-gold);
+            color: #000;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+
+        .deposit-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Games Grid */
+        .section-title {
+            padding: 0 20px;
+            font-size: 18px;
+            color: var(--gold);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            padding: 0 20px 30px 20px;
+        }
+
+        .game-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            aspect-ratio: 1/1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .game-card:active {
+            background: #252525;
+        }
+
+        .game-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .game-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff3b30;
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 800;
+        }
+
+        /* Footer Info */
+        .footer-info {
+            text-align: center;
+            padding: 20px;
+            color: #555;
+            font-size: 12px;
+        }
+
+        /* Overlay */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            padding: 40px 20px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
+
     <div class="header">
         <div class="logo">RICHI28</div>
+        <div id="user-name" style="font-size: 12px; color: var(--gold);">Online</div>
     </div>
-    <div class="balance-card">
-        <p>Sizning balansingiz:</p>
-        <h2 id="balance">0.00 UZS</h2>
+
+    <div class="wallet-container">
+        <div class="balance-card">
+            <div class="balance-label">Asosiy Balans</div>
+            <div class="balance-amount" id="main-balance">0.00 UZS</div>
+            <button class="deposit-btn" onclick="showDeposit()">HAMYONNI TO'LDIRISH</button>
+        </div>
     </div>
+
+    <div class="section-title">TOP O'YINLAR</div>
+
     <div class="game-grid">
-        <div class="game-item" onclick="location.href='https://demo.spribe.io/games/aviator?currency=USD&lang=en'">
-            🚀 AVIATOR (DEMO)
+        <div class="game-card" onclick="openGame('https://demo.spribe.io/games/aviator?lang=en')">
+            <span class="badge">HOT</span>
+            <div class="game-icon">🚀</div>
+            <div class="game-name">AVIATOR</div>
         </div>
-        
-        <div class="game-item" onclick="location.href='https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?gameSymbol=vs20olympgate&lang=en&cur=USD'">
-            🎰 SLOTS (DEMO)
+        <div class="game-card" onclick="openGame('https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?gameSymbol=vs20olympgate&lang=en&cur=USD')">
+            <div class="game-icon">⚡</div>
+            <div class="game-name">SLOTLAR</div>
         </div>
-        
-        <div class="game-item" onclick="location.href='https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?gameSymbol=vs20pwrnudge&lang=en&cur=USD'">
-            🃏 LIVE CASINO
+        <div class="game-card" onclick="openGame('https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?gameSymbol=vswayshammmer&lang=en&cur=USD')">
+            <div class="game-icon">🃏</div>
+            <div class="game-name">LIVE CASINO</div>
         </div>
-        
-        <div class="game-item" onclick="alert('Sport liniyalari tez kunda ishga tushadi!')">
-            ⚽ SPORT
+        <div class="game-card" onclick="alert('Sport liniyalari tez kunda!')">
+            <span class="badge" style="background: #34c759;">24/7</span>
+            <div class="game-icon">⚽</div>
+            <div class="game-name">SPORT</div>
         </div>
     </div>
-    <button class="btn-deposit" onclick="alert('Hisobni to\'ldirish uchun botga chek yuboring!\n\nKarta: 8600 0000 0000 0000\nEga: K. MAMADALIYEV')">
-    💳 HISOBNI TO'LDIRISH
-</button>
+
+    <div class="footer-info">
+        &copy; 2026 RICHI28 Entertainment. Barcha huquqlar himoyalangan.<br>
+        Tezkor to'lovlar va ishonchli xizmat.
+    </div>
+
+    <div id="depositModal" class="modal">
+        <h2 style="color: var(--gold); margin-bottom: 20px;">TO'LOV TIZIMI</h2>
+        <p style="margin-bottom: 20px; font-size: 14px;">Quyidagi kartaga to'lov qiling va botga chek yuboring:</p>
+        <div style="background: #222; padding: 20px; border-radius: 15px; margin-bottom: 30px;">
+            <div style="color: #888; font-size: 12px; margin-bottom: 5px;">Karta raqami:</div>
+            <div style="font-size: 20px; font-weight: bold; letter-spacing: 1px;">8600 1234 5678 9012</div>
+            <div style="color: #888; font-size: 12px; margin-top: 15px; margin-bottom: 5px;">Karta egasi:</div>
+            <div style="font-size: 16px;">K. MAMADALIYEV</div>
+        </div>
+        <button class="deposit-btn" onclick="closeDeposit()">YOPISH</button>
+    </div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand(); // Botni to'liq ekranga ochadi
+
+        function openGame(url) {
+            window.location.href = url;
+        }
+
+        function showDeposit() {
+            document.getElementById('depositModal').style.display = 'block';
+        }
+
+        function closeDeposit() {
+            document.getElementById('depositModal').style.display = 'none';
+        }
+
+        // Foydalanuvchi ismini ko'rsatish
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            document.getElementById('user-name').innerText = "@" + tg.initDataUnsafe.user.username;
+        }
+    </script>
 </body>
 </html>

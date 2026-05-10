@@ -3,251 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RICHI28 | Official Mini App</title>
+    <title>RICHI28 | Professional Betting Platform</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --gold: #d4af37;
-            --dark-bg: #0f0f0f;
-            --card-bg: #1a1a1a;
-            --text-white: #ffffff;
-            --gradient-gold: linear-gradient(135deg, #d4af37 0%, #f9e2af 50%, #b8860b 100%);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+            --gold: #ffb900;
+            --dark-main: #0a0e17;
+            --dark-card: #161b28;
+            --blue-accent: #007aff;
+            --text-gray: #8e94a0;
         }
 
         body {
-            background-color: var(--dark-bg);
-            color: var(--text-white);
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            overflow-x: hidden;
-        }
-
-        /* Header */
-        .header {
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.8);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 800;
-            background: var(--gradient-gold);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 1.5px;
-        }
-
-        /* Wallet Section */
-        .wallet-container {
-            padding: 20px;
-        }
-
-        .balance-card {
-            background: linear-gradient(145deg, #1e1e1e, #121212);
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            border-radius: 20px;
-            padding: 25px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .balance-label {
-            color: #888;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-        }
-
-        .balance-amount {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--gold);
-            margin-bottom: 20px;
-        }
-
-        .deposit-btn {
-            background: var(--gradient-gold);
-            color: #000;
-            border: none;
-            padding: 12px 40px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 16px;
-            cursor: pointer;
-            width: 100%;
-            transition: transform 0.2s;
-        }
-
-        .deposit-btn:active {
-            transform: scale(0.98);
-        }
-
-        /* Games Grid */
-        .section-title {
-            padding: 0 20px;
-            font-size: 18px;
-            color: var(--gold);
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .game-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            padding: 0 20px 30px 20px;
-        }
-
-        .game-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            overflow: hidden;
-            position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            aspect-ratio: 1/1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: 0.3s;
-        }
-
-        .game-card:active {
-            background: #252525;
-        }
-
-        .game-icon {
-            font-size: 40px;
-            margin-bottom: 10px;
-        }
-
-        .game-name {
-            font-size: 14px;
-            font-weight: 600;
-            color: #fff;
-        }
-
-        .badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #ff3b30;
+            background-color: var(--dark-main);
             color: white;
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-weight: 800;
+            font-family: 'Roboto', sans-serif;
+            margin: 0; padding-bottom: 70px;
         }
 
-        /* Footer Info */
-        .footer-info {
-            text-align: center;
-            padding: 20px;
-            color: #555;
-            font-size: 12px;
+        /* Top Bar */
+        .top-nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px; background: var(--dark-card); border-bottom: 1px solid #232a3d;
+            position: sticky; top: 0; z-index: 1000;
         }
 
-        /* Overlay */
+        .logo { font-size: 20px; font-weight: 900; color: var(--gold); letter-spacing: 1px; }
+
+        .auth-buttons button {
+            padding: 8px 15px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer;
+        }
+        .reg-btn { background: var(--blue-accent); color: white; }
+
+        /* Balance Section */
+        .user-panel {
+            background: var(--dark-card); margin: 10px; padding: 15px; border-radius: 12px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .balance-info div { font-size: 12px; color: var(--text-gray); }
+        .balance-info h2 { font-size: 22px; color: white; }
+
+        .quick-dep {
+            background: var(--gold); color: black; padding: 10px 20px; border-radius: 8px;
+            border: none; font-weight: 900;
+        }
+
+        /* Categories */
+        .categories {
+            display: flex; gap: 10px; padding: 10px; overflow-x: auto; white-space: nowrap;
+        }
+        .cat-item {
+            background: var(--dark-card); padding: 10px 20px; border-radius: 30px;
+            font-size: 13px; border: 1px solid #232a3d;
+        }
+        .cat-item.active { border-color: var(--gold); color: var(--gold); }
+
+        /* Game Grid */
+        .game-section { padding: 10px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .card {
+            background: var(--dark-card); border-radius: 12px; position: relative;
+            aspect-ratio: 16/10; overflow: hidden; border: 1px solid #232a3d;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .card img { width: 100%; height: 100%; object-fit: cover; position: absolute; opacity: 0.4; }
+        .card span { position: relative; z-index: 1; font-weight: bold; font-size: 14px; }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed; bottom: 0; width: 100%; background: var(--dark-card);
+            display: flex; justify-content: space-around; padding: 10px 0;
+            border-top: 1px solid #232a3d; z-index: 1000;
+        }
+        .nav-link { text-align: center; color: var(--text-gray); font-size: 10px; text-decoration: none; }
+        .nav-link i { font-size: 20px; display: block; margin-bottom: 4px; }
+        .nav-link.active { color: var(--gold); }
+
+        /* Modal Styles */
         .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            z-index: 1000;
-            padding: 40px 20px;
-            text-align: center;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 2000; padding: 20px;
         }
+        .modal-content { background: var(--dark-card); padding: 20px; border-radius: 15px; border: 1px solid var(--gold); }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 12px; color: var(--text-gray); margin-bottom: 5px; }
+        .form-group input { width: 100%; padding: 12px; background: #0a0e17; border: 1px solid #232a3d; color: white; border-radius: 8px; }
+        
+        .pay-methods { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .pay-item { background: #0a0e17; padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #232a3d; }
     </style>
 </head>
 <body>
 
-    <div class="header">
+    <div class="top-nav">
         <div class="logo">RICHI28</div>
-        <div id="user-name" style="font-size: 12px; color: var(--gold);">Online</div>
-    </div>
-
-    <div class="wallet-container">
-        <div class="balance-card">
-            <div class="balance-label">Asosiy Balans</div>
-            <div class="balance-amount" id="main-balance">0.00 UZS</div>
-            <button class="deposit-btn" onclick="showDeposit()">HAMYONNI TO'LDIRISH</button>
+        <div class="auth-buttons">
+            <button class="reg-btn" onclick="openModal('regModal')">REGISTRATSIYA</button>
         </div>
     </div>
 
-    <div class="section-title">TOP O'YINLAR</div>
+    <div class="user-panel">
+        <div class="balance-info">
+            <div>Asosiy Balans</div>
+            <h2 id="userBalance">0.00 UZS</h2>
+        </div>
+        <button class="quick-dep" onclick="openModal('depModal')">DEPOZIT</button>
+    </div>
 
-    <div class="game-grid">
-        <div class="game-card" onclick="openGame('https://demo.spribe.io/games/aviator?lang=en')">
-            <span class="badge">HOT</span>
-            <div class="game-icon">🚀</div>
-            <div class="game-name">AVIATOR</div>
-        </div>
-        <div class="game-card" onclick="openGame('https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?gameSymbol=vs20olympgate&lang=en&cur=USD')">
-            <div class="game-icon">⚡</div>
-            <div class="game-name">SLOTLAR</div>
-        </div>
-        <div class="game-card" onclick="openGame('https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?gameSymbol=vswayshammmer&lang=en&cur=USD')">
-            <div class="game-icon">🃏</div>
-            <div class="game-name">LIVE CASINO</div>
-        </div>
-        <div class="game-card" onclick="alert('Sport liniyalari tez kunda!')">
-            <span class="badge" style="background: #34c759;">24/7</span>
-            <div class="game-icon">⚽</div>
-            <div class="game-name">SPORT</div>
+    <div class="categories">
+        <div class="cat-item active">HAMMASI</div>
+        <div class="cat-item">SLOTLAR</div>
+        <div class="cat-item">LIVE CASINO</div>
+        <div class="cat-item">SPORT</div>
+        <div class="cat-item">VIRTUAL</div>
+    </div>
+
+    <div class="game-section">
+        <h3 style="margin-bottom:15px; font-size: 16px;">MASHHUR O'YINLAR</h3>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='https://demo.spribe.io/games/aviator'">
+                <span>🚀 AVIATOR</span>
+            </div>
+            <div class="card" onclick="window.location.href='https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?gameSymbol=vs20olympgate'">
+                <span>⚡ GATES OF OLYMPUS</span>
+            </div>
+            <div class="card" onclick="window.location.href='https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?gameSymbol=vswayshammmer'">
+                <span>🃏 LIVE CASINO</span>
+            </div>
+            <div class="card" onclick="alert('Tez kunda!')">
+                <span>⚽ FUTBOL LINIYASI</span>
+            </div>
         </div>
     </div>
 
-    <div class="footer-info">
-        &copy; 2026 RICHI28 Entertainment. Barcha huquqlar himoyalangan.<br>
-        Tezkor to'lovlar va ishonchli xizmat.
+    <div id="regModal" class="modal">
+        <div class="modal-content">
+            <h2 style="color:var(--gold)">REGISTRATSIYA</h2>
+            <div class="form-group">
+                <label>Email yoki Telefon</label>
+                <input type="text" placeholder="Kiriting...">
+            </div>
+            <div class="form-group">
+                <label>Parol</label>
+                <input type="password" placeholder="********">
+            </div>
+            <div class="form-group">
+                <label>Promokod (Majburiy emas)</label>
+                <input type="text" placeholder="Masalan: RICHI777" style="border-color: var(--gold)">
+            </div>
+            <button class="quick-dep" style="width:100%" onclick="closeModal('regModal')">HISOB OCHISH</button>
+        </div>
     </div>
 
-    <div id="depositModal" class="modal">
-        <h2 style="color: var(--gold); margin-bottom: 20px;">TO'LOV TIZIMI</h2>
-        <p style="margin-bottom: 20px; font-size: 14px;">Quyidagi kartaga to'lov qiling va botga chek yuboring:</p>
-        <div style="background: #222; padding: 20px; border-radius: 15px; margin-bottom: 30px;">
-            <div style="color: #888; font-size: 12px; margin-bottom: 5px;">Karta raqami:</div>
-            <div style="font-size: 20px; font-weight: bold; letter-spacing: 1px;">8600 1234 5678 9012</div>
-            <div style="color: #888; font-size: 12px; margin-top: 15px; margin-bottom: 5px;">Karta egasi:</div>
-            <div style="font-size: 16px;">K. MAMADALIYEV</div>
+    <div id="depModal" class="modal">
+        <div class="modal-content">
+            <h2 style="color:var(--gold)">HISOBNI TO'LDIRISH</h2>
+            <div class="pay-methods">
+                <div class="pay-item" onclick="alert('Karta: 8600... Chekni botga yuboring!')">💳 UZCARD/HUMO</div>
+                <div class="pay-item">₿ CRYPTO (USDT)</div>
+                <div class="pay-item">🌐 VISA/MASTERCARD</div>
+                <div class="pay-item">🅿️ PAYME/CLICK</div>
+            </div>
+            <button onclick="closeModal('depModal')" style="margin-top:20px; background:none; border:none; color:white; width:100%">ORQAGA</button>
         </div>
-        <button class="deposit-btn" onclick="closeDeposit()">YOPISH</button>
     </div>
+
+    <nav class="bottom-nav">
+        <a href="#" class="nav-link active"><i class="fa fa-home"></i>ASOSIY</a>
+        <a href="#" class="nav-link"><i class="fa fa-trophy"></i>SPORT</a>
+        <a href="#" class="nav-link"><i class="fa fa-gamepad"></i>GAMES</a>
+        <a href="#" class="nav-link"><i class="fa fa-headset"></i>SUPPORT</a>
+        <a href="#" class="nav-link"><i class="fa fa-user"></i>PROFIL</a>
+    </nav>
 
     <script>
         let tg = window.Telegram.WebApp;
-        tg.expand(); // Botni to'liq ekranga ochadi
+        tg.expand();
 
-        function openGame(url) {
-            window.location.href = url;
-        }
-
-        function showDeposit() {
-            document.getElementById('depositModal').style.display = 'block';
-        }
-
-        function closeDeposit() {
-            document.getElementById('depositModal').style.display = 'none';
-        }
-
-        // Foydalanuvchi ismini ko'rsatish
-        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            document.getElementById('user-name').innerText = "@" + tg.initDataUnsafe.user.username;
-        }
+        function openModal(id) { document.getElementById(id).style.display = 'block'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
     </script>
 </body>
 </html>
